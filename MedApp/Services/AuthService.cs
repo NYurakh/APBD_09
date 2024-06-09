@@ -7,7 +7,6 @@ using MedApp.Context;
 using MedApp.Contracts;
 using MedApp.Models;
 using MedApp.Helpers;
-using Microsoft.EntityFrameworkCore;
 
 namespace MedApp.Services;
 
@@ -16,6 +15,7 @@ public interface IAuthService
     void RegisterUser(RegisterRequest request);
     (string accessToken, string refreshToken) LoginUser(LoginRequest request);
     (string accessToken, string refreshToken) RefreshToken(string refreshToken);
+    User GetUserByEmail(string requestEmail);
 }
 
 public class AuthService : IAuthService
@@ -96,6 +96,11 @@ public class AuthService : IAuthService
         _context.SaveChanges();
 
         return (accessToken, newRefreshToken);
+    }
+
+    public User GetUserByEmail(string requestEmail)
+    {
+        return _context.Users.FirstOrDefault(u => u.Email == requestEmail);
     }
 
     private string GenerateAccessToken(IEnumerable<Claim> claims)

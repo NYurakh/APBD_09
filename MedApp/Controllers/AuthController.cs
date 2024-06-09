@@ -18,19 +18,32 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public IActionResult Register([FromBody] RegisterRequest request)
     {
-        _authService.RegisterUser(request);
-        return Ok(new { message = "User registered successfully" });
+        var existingUser = _authService.GetUserByEmail(request.Email);
+        if (existingUser!= null)
+        {
+            return Conflict("User already exists. Please log in.");
+        }
+
+        try
+        {
+            _authService.RegisterUser(request);
+            return Ok(new { message = "User registered successfully" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Failed to register user. Please try again.");
+        }
     }
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequest request)
     {
         var (accessToken, refreshToken) = _authService.LoginUser(request);
-        return Ok(new { AccessToken = accessToken, RefreshToken = refreshToken }); 
+        return Ok(new { AccessToken = accessToken, RefreshToken = refreshToken });
     }
 
     [HttpPost("refresh")]
-    public IActionResult RefreshToken([FromHeader(Name = "Authorization")] string authorizationHeader)
+    public IActionResult RefreshToken([FromHeader(Name = "authorizationHeader")] string authorizationHeader)
     {
         if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
         {
@@ -49,4 +62,5 @@ public class AuthController : ControllerBase
             return Unauthorized(ex.Message);
         }
     }
+
 }
