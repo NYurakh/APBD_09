@@ -1,3 +1,4 @@
+using MedApp.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedApp.Context;
@@ -9,6 +10,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Medicament> Medicaments { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<PrescriptionMedicament> PrescriptionMedicaments { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -16,6 +18,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>().HasKey(u => u.Id);
         modelBuilder.Entity<PrescriptionMedicament>()
             .HasKey(pm => new { pm.IdPrescription, pm.IdMedicament });
 

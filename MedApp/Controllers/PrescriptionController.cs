@@ -1,5 +1,6 @@
 using MedApp.Context;
 using MedApp.DTOs;
+using MedApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

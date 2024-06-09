@@ -1,3 +1,5 @@
+namespace MedApp.Models;
+
 public class Patient
 {
     public int IdPatient { get; set; }

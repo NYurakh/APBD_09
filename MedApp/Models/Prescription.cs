@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+namespace MedApp.Models;
+
 public class Prescription
 {
     public int IdPrescription { get; set; }
@@ -10,5 +12,5 @@ public class Prescription
     public Patient Patient { get; set; }
     public int IdDoctor { get; set; }
     public Doctor Doctor { get; set; }
-    public ICollection<PrescriptionMedicament> PrescriptionMedicaments { get; set; }
+    public IEnumerable<PrescriptionMedicament>? PrescriptionMedicaments { get; set; }
 }
